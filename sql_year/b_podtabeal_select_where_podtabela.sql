@@ -1,0 +1,1 @@
+SELECT schemat_tabeli, tytul, symbol FROM b_podtabele WHERE podtabela = ?;

@@ -1,0 +1,1 @@
+SELECT login, rola, idbr, idpbr FROM uzytkownicy WHERE login = ?;

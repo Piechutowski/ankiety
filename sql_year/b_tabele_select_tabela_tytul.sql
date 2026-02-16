@@ -1,0 +1,1 @@
+SELECT tabela, tytul FROM b_tabele ORDER BY lp ASC;

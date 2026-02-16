@@ -1,0 +1,27 @@
+{{ define "base"}}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.PageTitle}}</title> 
+    <link href="/frontend/output.css" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon.ico">
+</head>
+<body class="h-screen overflow-hidden">
+    <div class="h-full flex flex-col">
+        {{template "nav_top" .}}
+        
+        <div class="flex flex-1 min-h-0">
+            {{template "nav_left" .}}
+            
+            <main id="main-content" class="flex-1 bg-gray-50 overflow-hidden">
+                {{template "main" .}}
+            </main>
+        </div>
+    </div>
+    
+    <script src="/frontend/script.js" defer></script>
+</body>
+</html>
+{{end}}

@@ -1,0 +1,1 @@
+SELECT tytul FROM b_kody WHERE kod = ?;

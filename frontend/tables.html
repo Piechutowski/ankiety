@@ -1,0 +1,184 @@
+{{define "table_style"}}
+grid overflow-x-auto rounded-2xl bg-white/70 border border-white/60 ring-1 ring-black/5 pb-12
+{{end}}
+
+{{define "table_system_definition"}}
+<table class="min-w-full border-collapse">
+    <colgroup>
+        {{- range .Columns}}
+        <col style="width:{{if .Width}}{{.Width}}{{else}}90{{end}}px">
+        {{- end}}
+    </colgroup>
+    <thead class="bg-slate-700 text-white">
+    <tr class="bg-slate-500">
+        {{- range .Columns}}
+        <th class="relative group border border-slate-300 px-1 py-1 font-medium text-center">
+            {{.Name}}
+            {{- with .Title}}
+            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 
+                opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+                transition-opacity duration-200 pointer-events-none z-50
+                bg-gray-800 text-white text-lg rounded px-2 py-1 whitespace-nowrap
+                after:content-[''] after:absolute after:top-full after:left-1/2 
+                after:-translate-x-1/2 after:border-4 after:border-transparent 
+                after:border-t-gray-800">
+                {{.}}
+            </div>
+            {{- end}}
+        </th>
+        {{- end}}
+    </tr>
+    </thead>
+    <tbody>
+        {{range .Rows}}
+            <tr class="hover:bg-slate-50">
+                {{range .Cells}}
+                    <td class="border border-slate-200 p-1 space-x-2">
+                        {{template "input_dispatch" .}}
+                    </td>  
+                {{end}}
+            </tr>
+        {{end}}
+    </tbody>
+</table>
+{{end}}
+
+{{define "table_horizontal_dynamic_unique"}}
+<div 
+    data-table-type="HORIZONTAL_DYNAMIC_UNIQUE" 
+    data-endpoint="/app/{{.Year}}/bdgr/lista-ankiet/{{.IdGR}}/{{.Table}}/{{.Subtable}}/"
+    {{with .Data}}data-initial="{{.}}"{{end}}
+    class="{{template "table_style"}}"
+    style="grid-template-columns: 80px {{range .Columns}}{{if .Width}}{{.Width}}{{else}}140{{end}}px {{end}};"
+>
+    {{/* Row Selector */}}
+    {{template "row_selector" .Rows}}
+
+    {{/* Header Row 1 */}}
+    <div data-header class="row-span-2 px-2 py-4 font-bold text-slate-900 flex items-center justify-center bg-to-b from-slate-100 to-slate-200/90 border-b border-slate-300/60">
+        Usuń wiersz
+    </div>
+    {{- range .Columns}}
+    <div data-header class="px-3 py-2.5 font-semibold uppercase tracking-wider text-slate-500 text-center bg-to-b from-slate-100 to-slate-200/90 border-b border-l border-slate-300/50">
+        {{.DataTypeLabel}}
+    </div>
+    {{- end}}
+
+    {{/* Header Row 2 */}}
+    {{- range .Columns}}
+    <div data-subheader data-tooltip="{{.Title}}" class="px-3 py-3 font-semibold text-slate-700 text-center bg-slate-50/80 border-b border-l border-slate-200/60 cursor-default">
+        {{.Name}}
+    </div>
+    {{- end}}
+
+    {{/* Rows will be inserted here via JS */}}
+</div>
+{{end}}
+
+
+{{define "table_horizontal_dynamic_duplicable"}}
+<div 
+    data-table-type="HORIZONTAL_DYNAMIC_DUPLICABLE" 
+    data-endpoint="/app/{{.Year}}/bdgr/lista-ankiet/{{.IdGR}}/{{.Table}}/{{.Subtable}}/"
+    {{with .Data}}data-initial="{{.}}"{{end}}
+    class="{{template "table_style"}}"
+    style="grid-template-columns: 80px {{range .Columns}}{{if .Width}}{{.Width}}{{else}}140{{end}}px {{end}};"
+>
+    {{/* Row Selector */}}
+    {{template "row_selector" .Rows}}
+
+    {{/* Header Row 1 */}}
+    <div data-header class="row-span-2 px-2 py-4 font-bold text-slate-900 flex items-center justify-center bg-to-b from-slate-100 to-slate-200/90 border-b border-slate-300/60">
+        Usuń wiersz
+    </div>
+    {{- range .Columns}}
+    <div data-header class="px-3 py-2.5 font-semibold uppercase tracking-wider text-slate-500 text-center bg-to-b from-slate-100 to-slate-200/90 border-b border-l border-slate-300/50">
+        {{.DataTypeLabel}}
+    </div>
+    {{- end}}
+
+    {{/* Header Row 2 */}}
+    {{- range .Columns}}
+    <div data-subheader data-tooltip="{{.Title}}" class="px-3 py-3 font-semibold text-slate-700 text-center bg-slate-50/80 border-b border-l border-slate-200/60 cursor-default">
+        {{.Name}}
+    </div>
+    {{- end}}
+
+    {{/* Rows will be inserted here via JS */}}
+</div>
+{{end}}
+
+
+{{define "table_horizontal_static_unique"}}
+<div 
+    data-table-type="HORIZONTAL_STATIC_UNIQUE" 
+    data-endpoint="/app/{{.Year}}/bdgr/lista-ankiet/{{.IdGR}}/{{.Table}}/{{.Subtable}}/"
+    class="{{ template "table_style" }}"
+    style="grid-template-columns: 280px {{range .Columns}}{{if .Width}}{{.Width}}{{else}}140{{end}}px {{end}};"
+>
+    {{/* Header Row 1 */}}
+    <div data-header class="row-span-2 px-5 py-4 font-bold tracking-tight text-slate-900 flex items-center bg-to-b from-slate-100 to-slate-200/90 border-b border-slate-300/60">
+        Wyszczególnienie
+    </div>
+    {{- range .Columns}}
+    <div data-header class="px-3 py-2.5 font-semibold uppercase tracking-wider text-slate-500 text-center bg-to-b from-slate-100 to-slate-200/90 border-b border-l border-slate-300/50">
+        {{.DataTypeLabel}}
+    </div>
+    {{- end}}
+
+    {{/* Header Row 2 */}}
+    {{- range .Columns}}
+    <div data-subheader data-tooltip="{{.Title}}" class="px-3 py-3 font-semibold text-slate-700 text-center bg-slate-50/80 border-b border-l border-slate-200/60 cursor-default">
+        {{.Name}}
+    </div>
+    {{- end}}
+
+    {{/* Data Rows */}}
+    {{- range $i, $row := .Rows}}
+    <div data-cell data-row-index="{{$i}}" class="px-5 py-3.5 flex items-center text-slate-600 font-medium border-b border-slate-100/80 transition-colors duration-150">
+        {{$row.Title}}
+    </div>
+        {{- range $row.Cells}}
+        <div data-cell data-row-index="{{$i}}" class="px-2 py-2 flex items-center justify-center border-b border-l border-slate-100/60 transition-all duration-150">
+            {{template "input_dispatch" .}}
+        </div>
+        {{- end}}
+    {{- end}}
+</div>
+{{end}}
+
+{{define "table_vertical_static_unique"}}
+<div 
+    data-table-type="VERTICAL_STATIC_UNIQUE" 
+    data-endpoint="/app/{{.Year}}/bdgr/lista-ankiet/{{.IdGR}}/{{.Table}}/{{.Subtable}}/"
+    class="{{template "table_style"}}"
+    style="grid-template-columns: 700px 500px;"
+>
+    {{/* Header */}}
+    <div data-header class="px-3 py-4 font-semibold uppercase tracking-wider text-slate-500 text-center flex items-center justify-center bg-to-b from-slate-100 to-slate-200/90 border-b border-l border-slate-300/50">
+        Kod
+    </div>
+    <div data-header class="px-3 py-4 font-semibold uppercase tracking-wider text-slate-500 text-center flex items-center justify-center bg-to-b from-slate-100 to-slate-200/90 border-b border-l border-slate-300/50">
+        Wartość
+    </div>
+    {{- range $i, $column := .Columns}}
+        {{- $row := index $.Rows $i}}
+        <div data-cell data-row-index="{{$i}}" class="px-5 py-3.5 flex items-center text-slate-600 font-medium border-b border-slate-100/80 transition-colors duration-150"> 
+            {{$row.Title}} [{{$column.DataTypeLabel}}]
+        </div>        
+        {{- $cell := index $row.Cells 0}}
+        <div data-cell data-row-index="{{$i}}" class="px-2 py-2 flex items-center justify-center border-b border-l border-slate-100/60 transition-all duration-150">
+            {{template "input_dispatch" $cell}}
+        </div>
+    {{- end}}
+</div>
+{{end}}
+
+{{define "table_pkd_static_unique"}}
+
+{{end}}
+
+{{define "table_simc_static_unique"}}
+
+{{end}}
+

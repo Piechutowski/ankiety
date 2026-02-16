@@ -1,0 +1,12 @@
+# Compiled binary
+app
+
+# Databases
+db/
+
+# Compiled frontend (generated from script.ts and input.css)
+frontend/script.js
+frontend/output.css
+
+# Scratch notes
+pisdlo

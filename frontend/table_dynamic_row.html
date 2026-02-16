@@ -1,0 +1,20 @@
+{{/* Template for a dynamic row returned by the server */}}
+{{define "base"}}
+{{ $index := .Index}}
+<div data-cell data-row-index="{{.Index}}" data-row-code="{{.Code}}" class="px-1 py-2 flex items-center justify-center border-b border-slate-100/80">
+    <button 
+        type="button"
+        data-delete-row
+        class="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all duration-150"
+    >
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    </button>
+</div>
+{{- range .Cells}}
+<div data-cell data-row-index="{{$index}}" class="px-2 py-2 flex items-center justify-center border-b border-l border-slate-100/60 transition-all duration-150 ">
+    {{template "input_dispatch" .}}
+</div>
+{{- end}}
+{{end}}

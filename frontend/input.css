@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+[data-tbody] [data-row]:nth-child(odd) [data-cell] {
+    background-color: rgb(243 244 246); /* gray-100 */
+}
+
+[data-tbody] [data-row]:nth-child(even) [data-cell] {
+    background-color: rgb(209 213 219); /* gray-300 */
+}

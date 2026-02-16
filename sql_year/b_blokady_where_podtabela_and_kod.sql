@@ -1,0 +1,1 @@
+SELECT kolumna FROM b_blokady WHERE podtabela = ? AND kod = ?;

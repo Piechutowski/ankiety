@@ -1,0 +1,1 @@
+SELECT podtabela, tytul FROM b_podtabele WHERE tabela = ? ORDER BY lp ASC;

@@ -1,0 +1,22 @@
+{{ define "base"}}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.PageTitle}}</title> 
+    <link href="/frontend/output.css" rel="stylesheet">
+</head>
+<body class="h-screen overflow-hidden">
+    <div class="h-full flex flex-col">
+        {{template "nav_top" .}}
+        
+        <main id="main-content" class="flex-1 overflow-auto bg-gray-50">
+            {{template "main" .}}
+        </main>
+    </div>
+    
+    <script src="/frontend/script.js" defer></script>
+</body>
+</html>
+{{end}}

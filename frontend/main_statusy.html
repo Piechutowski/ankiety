@@ -1,0 +1,81 @@
+{{ define "main" }}
+<div class="overflow-auto h-full pr-4 pb-4">
+    <table class="border-collapse bg-white shadow-sm" data-table-statusy>
+        <thead class="sticky top-0 z-10">
+            <tr class="bg-gradient-to-r from-slate-700 to-slate-800 text-white">
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-left whitespace-nowrap">IDGR</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-left whitespace-nowrap">IDBR</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-left whitespace-nowrap">IDPBR</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-left whitespace-nowrap">Etap</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">O</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">OW</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">OO</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">B</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">BW</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">BNW</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">BO</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">K</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">Z</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-left whitespace-nowrap">Komentarz ZBR</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-left whitespace-nowrap">Komentarz Inst</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">Przepis. SP</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">Rok</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">Testowanie</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">Przek. ZBR</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">Zwrot PBR</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">Przek. Inst</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">Zwrot ZBR</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">Eksport</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">Import</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">Akceptacja</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">Zamknięcie</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-center whitespace-nowrap">Przepis. SK</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200">
+            {{- $BaseUrl := .BaseUrl -}}
+            {{- range $i, $s := .Statusy }}
+            <tr data-row-index="{{ $i }}" data-row-url="{{ $BaseUrl }}{{ $s.IDGR }}" class="hover:bg-blue-50 transition-colors cursor-pointer">
+                <td class="px-4 py-3 text-sm font-semibold text-slate-900 whitespace-nowrap">{{ $s.IDGR }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 whitespace-nowrap">{{ $s.IDBR }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 whitespace-nowrap">{{ $s.IDPBR }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 whitespace-nowrap">{{ $s.Etap }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center">{{ if $s.O.Valid }}{{ $s.O.Int64 }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center">{{ if $s.OW.Valid }}{{ $s.OW.Int64 }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center">{{ if $s.OO.Valid }}{{ $s.OO.Int64 }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center">{{ if $s.B.Valid }}{{ $s.B.Int64 }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center">{{ if $s.BW.Valid }}{{ $s.BW.Int64 }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center">{{ if $s.BNW.Valid }}{{ $s.BNW.Int64 }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center">{{ if $s.BO.Valid }}{{ $s.BO.Int64 }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center">{{ if $s.K.Valid }}{{ $s.K.Int64 }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center">{{ if $s.Z.Valid }}{{ $s.Z.Int64 }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 max-w-[180px] truncate">{{ if $s.KomentarzZBR.Valid }}{{ $s.KomentarzZBR.String }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 max-w-[180px] truncate">{{ if $s.KomentarzInst.Valid }}{{ $s.KomentarzInst.String }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center whitespace-nowrap">{{ $s.DataPrzepisaniaNaSP }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center">{{ if $s.RokAuweitr.Valid }}{{ $s.RokAuweitr.Int64 }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center whitespace-nowrap">{{ if $s.DataTestowania.Valid }}{{ $s.DataTestowania.String }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center whitespace-nowrap">{{ if $s.DataPrzekazaniaZBR.Valid }}{{ $s.DataPrzekazaniaZBR.String }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center whitespace-nowrap">{{ if $s.DataZwrotuPBR.Valid }}{{ $s.DataZwrotuPBR.String }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center whitespace-nowrap">{{ if $s.DataPrzekazaniaInst.Valid }}{{ $s.DataPrzekazaniaInst.String }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center whitespace-nowrap">{{ if $s.DataZwrotuZBR.Valid }}{{ $s.DataZwrotuZBR.String }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center whitespace-nowrap">{{ if $s.DataEksportu.Valid }}{{ $s.DataEksportu.String }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center whitespace-nowrap">{{ if $s.DataImportu.Valid }}{{ $s.DataImportu.String }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center whitespace-nowrap">{{ if $s.DataAkceptacji.Valid }}{{ $s.DataAkceptacji.String }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center whitespace-nowrap">{{ if $s.DataZamkniecia.Valid }}{{ $s.DataZamkniecia.String }}{{ end }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600 text-center whitespace-nowrap">{{ if $s.DataPrzepisaniaZSK.Valid }}{{ $s.DataPrzepisaniaZSK.String }}{{ end }}</td>
+            </tr>
+            {{- end }}
+        </tbody>
+    </table>
+
+    {{- if not .Statusy }}
+    <div class="flex flex-col items-center justify-center py-16 text-slate-400">
+        <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <p class="text-lg font-medium">Brak ankiet</p>
+        <p class="text-sm">Nie znaleziono żadnych rekordów</p>
+    </div>
+    {{- end }}
+</div>
+{{ end }}

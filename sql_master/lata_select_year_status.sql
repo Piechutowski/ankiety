@@ -1,0 +1,1 @@
+SELECT rok, zablokowany, odlaczony FROM lata ORDER BY rok asc;

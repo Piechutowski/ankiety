@@ -1,0 +1,177 @@
+{{ define "nav_top" }}
+<nav class="bg-white shadow-sm border-b border-gray-200 h-16 shrink-0">
+    <div class="w-full px-6 h-full">
+        <div class="flex justify-between items-center h-full">
+            <!-- Left side - Module, Year and Farm selects -->
+            <div class="flex items-center gap-4">
+                <span class="text-lg font-bold text-gray-900 min-w-[120px]">{{.Module}}</span> 
+                
+                <div class="h-6 w-px bg-gray-300"></div>                
+                <span class="text-lg font-bold text-gray-900">Rok: </span> 
+                <div class="relative" id="year-select-container">
+                    <button 
+                        type="button"
+                        id="year-select-button"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition flex items-center justify-between"
+                    >
+                        <span id="year-selected-display" class="flex items-center gap-2">
+                            {{if .CurrentYear}}
+                                <span>{{.CurrentYear.Year}}</span>
+                                {{if .CurrentYear.Locked}}
+                                <svg class="w-5 h-5 text-red-500 lock-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
+                                {{else}}
+                                <svg class="w-5 h-5 text-green-500 unlock-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+                                </svg>
+                                {{end}}
+                            {{else}}
+                                <span class="text-gray-500">Select Year</span>
+                            {{end}}
+                        </span>
+                        <svg class="w-4 h-4 ml-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    
+                    <div 
+                        id="year-dropdown"
+                        class="hidden absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                    >
+                        {{range .Years}}
+                        <a 
+                            href="/app/{{.Year}}/"
+                            class="year-option block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 transition flex items-center justify-between"
+                            data-value="{{.Year}}"
+                            data-locked="{{.Locked}}"
+                        >
+                            <span>{{.Year}}</span>
+                            {{if .Locked}}
+                            <svg class="w-5 h-5 text-red-500 lock-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                            {{else}}
+                            <svg class="w-5 h-5 text-green-500 unlock-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+                            </svg>
+                            {{end}}
+                        </a>
+                        {{end}}
+                    </div>
+                </div>
+                
+                {{with .IdGR}}
+                    <div class="h-6 w-px bg-gray-300"></div>
+                    <div>
+                        <span class="text-lg text-gray-900 font-bold">IdGR:</span>
+                        <span class="text-lg text-gray-900">{{.}}</span> 
+                    </div>
+                {{end}}
+            </div>
+            
+            <!-- Right side - User menu -->
+            <div class="relative" id="user-menu-container">
+                <button 
+                    id="user-menu-button" 
+                    class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 transition group"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                >
+                    <svg class="w-5 h-5 text-gray-600 group-hover:text-blue-600 transition shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm font-medium text-gray-900 whitespace-nowrap">{{.User.Login}} ({{UserTypeName .User.Role}})</span>
+                        
+                        <div class="h-5 w-px bg-gray-400"></div>
+                        
+                        <div class="flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-gray-600 group-hover:text-blue-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span id="session-timer" class="text-sm font-medium text-gray-600 tabular-nums">30:00</span>
+                        </div>
+                    </div>
+                </button>
+                
+                <!-- Dropdown menu -->
+                <div 
+                    id="user-menu-dropdown" 
+                    class="hidden absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                >
+                    <div class="px-4 py-3 border-b border-gray-100">
+                        <div class="flex items-center mb-2">
+                            <span class="text-xs font-medium text-gray-500">Login:&nbsp;</span> 
+                            <span class="text-sm text-gray-900">{{.User.Login}}</span>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <span class="text-xs font-medium text-gray-500">Rola:&nbsp;</span>
+                            <span class="text-sm text-gray-900">{{UserTypeName .User.Role}}</span>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <span class="text-xs font-medium text-gray-500">IdBR:&nbsp;</span>
+                            <span class="text-sm text-gray-900">{{.User.IdBR}}</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-xs font-medium text-gray-500">IdPBR:&nbsp;</span>
+                            <span class="text-sm text-gray-900">{{.User.IdPBR}}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="px-4 py-3 border-b border-gray-100">
+                        <div class="mb-2">
+                            <span class="text-xs font-medium text-gray-500 block mb-1">Ostatnie Logowanie:</span>
+                            <span class="text-sm text-gray-900">{{.User.LastLogin}}</span>
+                        </div>
+                        <div>
+                            <span class="text-xs font-medium text-gray-500 block mb-1">Ostatnia zmiana hasla:</span>
+                            <span class="text-sm text-gray-900">{{.User.LastPasswordChange}}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="py-1">
+                        <a href="/user/ustawienia/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition group">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-3 text-gray-600 group-hover:text-blue-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                                <span class="group-hover:text-gray-900 transition">Ustawienia</span>
+                            </div>
+                        </a>
+                        
+                        <a href="/docs" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition group">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-3 text-gray-600 group-hover:text-blue-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="group-hover:text-gray-900 transition">Help</span>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="border-t border-gray-100">
+                        <button 
+                            type="button"
+                            id="logout-button"
+                            class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition group relative overflow-hidden"
+                        >
+                            <div class="flex items-center relative z-10">
+                                <svg class="w-5 h-5 mr-3 text-red-600 group-hover:text-red-700 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                </svg>
+                                <span class="group-hover:text-red-700 transition">Hold to Logout</span>
+                            </div>
+                            <div id="logout-progress" class="absolute bottom-0 left-0 h-1 bg-red-500 w-0 transition-none"></div>
+                        </button>
+                        <form method="GET" action="/logout" id="logout-form" class="hidden">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+{{end}}

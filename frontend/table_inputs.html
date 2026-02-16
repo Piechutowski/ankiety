@@ -1,0 +1,163 @@
+{{/* Shared Tailwind classes for all inputs */}}
+
+{{define "input_class"}}
+    w-full h-full p-0.5 font-mono border-2 rounded-lg transition-all duration-200 text-right
+    {{if .}}
+    bg-gray-50 border-gray-200 
+    focus:outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100
+    {{else}}
+    bg-gray-100 border-gray-200 cursor-not-allowed opacity-75
+    {{end}}
+{{end}}
+
+
+{{define "input_dispatch"}}
+    {{- if .Blocked -}}
+        {{template "input_blank"}}
+    {{- else if eq .Column.DataType "str" -}}
+        {{template "input_string" .}}
+    {{- else if or (eq .Column.DataType "int") (eq .Column.DataType "float") -}}
+        {{template "input_number" .}}
+    {{- else if eq .Column.DataType "P" -}}
+        {{template "input_enum" .}}
+    {{- else if eq .Column.DataType "W0"}}
+        {{template "input_multi_exclusive" .}}
+    {{- else -}}
+        {{template "input_error" .}}
+    {{- end -}}
+{{end}}   
+
+{{define "input_error"}} 
+    <span><span class="font-bold text-red-600">Error:</span> Column data type cannot be handled: <code class="bg-red-50 text-red-700 px-1 rounded font-mono font-semibold">{{.Column.DataType}}</code></span>
+{{end}}
+
+{{define "input_blank"}}
+<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+</svg>
+{{end}}
+
+{{ define "input_string"}}
+<input
+    type="text"
+    name="{{.Column.Name}}"
+    {{with .Value}}value="{{.}}"{{end}}
+    data-format="{{.Column.Format}}"
+    {{with .Column.Min}}data-min="{{.}}"{{end}}
+    {{with .Column.Max}}data-max="{{.}}"{{end}}
+    {{if .Required}}data-required="true"{{else}}data-required="false"{{end}}
+    {{with .Column.Regex}}data-regex="{{.}}"{{end}}
+    class="{{template "input_class" .Editable}} string-input"
+    style="text-align: left;"
+    {{if eq .Editable 0}}readonly{{end}}
+/>
+{{end}}
+
+{{define "input_number"}}
+  <input 
+    type="text"
+    name="{{.Column.Name}}"
+    {{with .Value}}value="{{.}}"{{end}}
+    data-format="{{.Column.Format}}"
+    {{with .Column.Min}}data-min="{{.}}"{{end}}
+    {{with .Column.Max}}data-max="{{.}}"{{end}}
+    {{if .Required}}data-required="true"{{else}}data-required="false"{{end}}
+    {{with .Column.Regex}}data-regex="{{.}}"{{end}}
+    class="{{template "input_class" .Editable}}number-input"
+    {{if eq .Editable 0}}readonly{{end}}
+  >
+{{end}}
+
+{{define "input_enum"}}
+<div data-enum-container class="relative w-full">
+  <input
+    data-enum-input
+    type="text"
+    autocomplete="off"
+    class="{{template "input_class" .Editable}}"
+    placeholder="Type to search..."
+    name="placeholder"
+    style="text-align: left;"
+    {{if eq .Editable 0}}readonly{{end}}
+  />
+  <input
+    data-enum-value
+    type="hidden"
+    name="{{.Column.Name}}"
+    {{with .Value}}value="{{.}}"{{end}}
+  />
+  <div
+    data-enum-dropdown
+    class="hidden fixed z-50 bg-white border-2 border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+  >
+    {{range .Column.Enum}}
+    <div
+      data-enum-option
+      data-value="{{.Value}}"
+      data-label="{{.Label}}"
+      class="px-3 py-2 cursor-pointer hover:bg-indigo-50 text-gray-800 transition-colors duration-150"
+    >
+      {{.Value}} - {{.Label}}
+    </div>
+    {{end}}
+  </div>
+</div>
+{{end}}
+
+{{define "input_multi_exclusive"}}
+<div class="w-full" data-multi-exclusive-container>
+  <div class="space-y-1 px-2 py-1">
+    {{range $index, $option := .Column.Enum}}
+    <label class="flex items-center gap-2 cursor-pointer hover:bg-indigo-50 px-2 py-1 rounded transition-colors duration-150">
+      <input 
+        type="checkbox" 
+        value="{{.Value}}"
+        {{if eq $index 0}}data-exclusive-option{{else}}data-regular-option{{end}}
+        data-multi-option
+        {{if eq $.Editable 0}}disabled{{end}}
+        class="w-4 h-4 rounded border-2 border-gray-300 text-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-200 {{if eq $.Editable 0}}cursor-not-allowed opacity-75{{else}}cursor-pointer{{end}}"
+      >
+      <span class="text-sm {{if eq $.Editable 0}}text-gray-500{{else}}text-gray-800{{end}}">{{.Value}} - {{.Label}}</span>
+    </label>
+    {{end}}
+  </div>
+  <input 
+    type="hidden" 
+    name="{{.Column.Name}}" 
+    data-multi-exclusive-value
+    {{if .Required}}data-required="true"{{else}}data-required="false"{{end}}   
+    {{with .Value}}value="{{.}}"{{end}}
+  >
+</div>
+{{end}}
+
+{{define "row_selector"}}
+<div data-row-selector datadata-enum-container class="col-span-full p-4 bg-slate-50/80 border-b border-slate-200/60">
+    <!--<div class="relative w-80" data-enum-container data-enum-row-selector data-unique="false">-->
+    <input
+        type="text"
+        data-enum-input
+        data-row-adder
+        autocomplete="off"
+        class="w-full p-2 font-mono border-2 rounded-lg transition-all duration-200 bg-gray-50 border-gray-200 focus:outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100"
+        placeholder="Wybierz pozycję do dodania..."
+        style="text-align: left;"
+    />
+    <div
+        data-enum-dropdown
+        class="hidden absolute z-50 w-full bg-white border-2 border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+    >
+        {{range .}}
+        <div
+            data-enum-option
+            data-row-code="{{.Code}}"
+            data-value="{{.Code}}"
+            data-label="{{.Title}}"
+            class="px-3 py-2 cursor-pointer hover:bg-indigo-50 text-gray-800 transition-colors duration-150"
+        >
+            {{.Code}} - {{.Title}}
+        </div>
+        {{end}}
+    </div>
+</div>
+{{end}}

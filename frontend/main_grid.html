@@ -1,0 +1,72 @@
+{{ define "main"}}
+<div class="flex flex-col h-full p-4 gap-2" data-tab-rows>
+    <!-- Tabs Section - fixed at top -->
+    <div class="flex flex-col gap-2">
+        {{range $index, $row := .TabRows}}
+        {{if $index}}<div class="border-t border-gray-200"></div>{{end}}
+        {{$baseUrl := $row.BaseUrl}}
+        <div class="flex gap-2">
+            {{range $row.Items}}
+                {{if .Selected}}
+                    <span data-subheader data-tooltip="{{.Tooltip}}" class="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white shadow-md cursor-default">
+                        {{.Label}}
+                    </span>
+                {{else}}
+                    <a 
+                        href="{{$baseUrl}}/{{.URLSegment}}"
+                        data-subheader data-tooltip="{{.Tooltip}}"
+                        class="px-4 py-2 text-sm font-medium rounded-lg transition bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                    >
+                        {{.Label}}
+                    </a>
+                {{end}}
+            {{end}}
+        </div>
+        {{end}}
+        <div class="border-t border-gray-200"></div>
+    </div>
+    
+    <!-- Content Area - scrollable -->
+    {{if ne .Table.Type ""}}
+        <div class="overflow-auto h-full pb-2">
+        {{with .Table.TableName}}
+            <h1 class="text-xl font-medium tracking-wide text-gray-800 pb-1">{{.}}</h1>
+        {{end}} 
+        {{if eq .Table.Type "HORIZONTAL_DYNAMIC_DUPLICABLE"}}
+            {{template "table_horizontal_dynamic_duplicable" .Table}}
+        {{else if eq .Table.Type "HORIZONTAL_DYNAMIC_UNIQUE"}}
+            {{template "table_horizontal_dynamic_unique" .Table}}
+        {{else if eq .Table.Type "HORIZONTAL_STATIC_UNIQUE"}}
+            {{template "table_horizontal_static_unique" .Table}}
+        {{else if eq .Table.Type "PKD_STATIC_UNIQUE"}}
+            {{template "table_pkd_static_unique" .Table}}
+        {{else if eq .Table.Type "SIMC_STATIC_UNIQUE"}}
+            {{template "table_simc_static_unique" .Table}}
+        {{else if eq .Table.Type "VERTICAL_STATIC_UNIQUE"}}
+            {{template "table_vertical_static_unique" .Table}}
+        {{else if eq .Table.Type "SYSTEM_DEFINITION"}}
+            {{template "table_system_definition" .Table}}
+        {{else}}
+            <!-- Unknown table type -->
+            <div class="flex flex-col items-center justify-center p-12">
+                <svg class="w-16 h-16 mb-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <h1 class="text-2xl font-bold text-gray-900 mb-3">Nieznany typ tabeli</h1>
+                <p class="text-gray-600">{{.Table.Type}}</p>
+            </div>
+        {{end}}
+        </div>
+    {{else}}
+    <!-- Empty state -->
+    <div class="flex flex-col items-center justify-center h-full">
+        <svg class="w-16 h-16 mb-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <h1 class="text-2xl font-bold text-gray-900 mb-3">Wybierz tabelę</h1>
+        <p class="text-gray-600">Aby kontynuować, wybierz tabelę z menu u góry</p>
+    </div>
+    {{end}}
+</div>
+</div>
+{{end}}

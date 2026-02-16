@@ -1,0 +1,1 @@
+SELECT login, password FROM uzytkownicy WHERE login = ?;

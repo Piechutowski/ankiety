@@ -1,0 +1,292 @@
+TableGroup "Ankiety" [color: #24BAB1] {
+  b_tabele
+  b_podtabele
+  b_typy_jm
+  b_kolumny
+  b_kody
+  b_slowniki
+  b_typy_slownikow
+  b_kody__podtabele
+  b_blokady
+  b_bdgrobmsp
+  b_stawki_vat_rr
+  b_stawki_vat_zo
+  b_kody_w_tabeli
+  b_typy_tabel
+  b_rodzaje_tabel
+
+
+  utgr_wspolczynnikiso
+  pkd_pkd
+  fr_kody
+  teryt_simc
+  teryt_teryt
+}
+
+Table b_kody_w_tabeli {
+  kody_w_tabli string [pk]
+  kody_w_tabli4schemat string [not null]
+  opis string [not null]
+  uwagi string
+}
+
+Table b_typy_tabel {
+  typ_tabeli string [pk]
+  typ_tabeli4schemat string [not null]
+  opis string [not null]
+  uwagi string
+}
+
+Table b_rodzaje_tabel {
+  rodzaj_tabeli string [pk]
+  rodzaj_tabeli4schemat string [not null]
+  opis string [not null]
+  uwagi string
+}
+
+Table b_tabele {
+  tabela string [pk]
+  tytul string [not null]
+  lp int [not null]
+  symbol string [not null]
+  opis string
+  uwagi string
+}
+
+Table b_podtabele {
+  podtabela string [not null]
+  tabela string [not null, ref: > b_tabele.tabela]
+  rodzaj_tabeli string [not null, ref: > b_rodzaje_tabel.rodzaj_tabeli]
+  typ_tabeli string [not null, ref: > b_typy_tabel.typ_tabeli]
+  kody_w_tabeli string [not null, ref: > b_kody_w_tabeli.kody_w_tabli]
+  schemat_tabeli string [not null]
+  tytul string [not null]
+  lp integer [not null]
+  symbol string [not null]
+  czy_przepisac integer [not null]
+  opis string
+  uwagi string
+
+  indexes {
+    (podtabela, tabela) [unique]
+  }
+}
+
+Table b_typy_jm {
+  jm string [pk] // [zł]
+  opis string [not null]
+
+  // int, float, string
+  typ_jm string [not null]  
+  format string [not null]
+
+  uwagi string
+}
+
+Table b_kolumny {
+  kolumna string [pk] // INPUT NAME
+  symbol string [not null]
+  tytul string [not null]
+  lp integer [not null]
+  jm string [not null, ref: > b_typy_jm.jm]
+  wymagana integer [not null]
+  widoczna integer [not null]
+  szerokosc integer [not null]
+  min integer [not null]
+  max integer [not null]
+  slownik string [ref: > b_slowniki.slownik]
+  przepisac_na string
+  opis string
+  uwagi string
+
+  indexes {
+    (tytul, lp) [unique]
+  }
+}
+
+Table b_slowniki {
+  slownik string [pk]
+  opis string [not null]
+  uwagi string
+  wartosc string [not null]
+  typ_slownika string [not null, ref: > b_typy_slownikow.typ_slownika]
+}
+
+Table b_typy_slownikow {
+  typ_slownika string [pk]
+  opis string
+  uwagi string
+}
+
+Table b_blokady {
+
+  podtabela string [not null, ref: > b_podtabele.podtabela]
+  kolumna string [not null, ref: > b_kolumny.kolumna]   
+  kod string [not null, ref: > b_kody.kod]    
+  opis string
+  uwagi string
+
+  indexes {
+    (podtabela, kolumna, kod) [unique]
+  }
+}
+
+Table b_kody {
+  kod string [pk]
+  kod_soc string [not null]
+  tytul string [not null]
+  opis string
+  uwagi string
+  stawka_vat_zo string [ref: > b_stawki_vat_zo.stawka_vat_zo]
+  stawka_vat_rr string [ref: > b_stawki_vat_rr.stawka_vat_rr]
+}
+
+Table b_stawki_vat_zo {
+  stawka_vat_zo string [pk]
+  wartosc_stawki_vat_zo float
+  tytul string [not null]
+  opis string
+  uwagi string
+}
+
+Table b_stawki_vat_rr {
+  stawka_vat_rr string [pk]
+  wartosc_stawki_vat_rr float
+  tytul string [not null]
+  opis string
+  uwagi string
+}
+
+Table b_kody__podtabele {
+
+  kod string [not null, ref: > b_kody.kod]
+  podtabela string [not null, ref: > b_podtabele.podtabela]
+  fr_tabela_kod string [not null, ref: > fr_kody.tabela_kod] 
+  opis string
+  uwagi string
+
+  indexes {
+    (kod, podtabela) [unique]
+  }
+}
+
+Table b_bdgrobmsp {
+  idgr string
+  podtabela string [ref: > b_podtabele.podtabela]
+
+  dane string [not null]
+  data_modyfikacji string [not null]
+
+
+  indexes {
+    (idgr, podtabela) [pk]
+  }
+}
+
+Table teryt_simc {
+  simc string [pk]
+  miejscowosc string [not null]
+  nrwpgr string [not null, ref: > teryt_teryt.nrwpgr]
+}
+
+Table teryt_teryt {
+  nrwpgr string [pk]
+  wojewodztwo string [not null]
+  powiat string [not null]
+  gmina string [not null]
+  rodzaj_gminy string [not null]
+}
+
+Table pkd_pkd {
+  kod string [pk]
+  opis string [not null]
+}
+
+Table utgr_wspolczynnikiso {
+  kod_soc string [pk]
+  opis_soc string [not null]
+}
+
+Table fr_kody {
+  tabela_kod string [pk]
+  nazwa string [not null]
+  tabela string [not null]
+  kod string [not null]
+}
+
+
+TableGroup "Administracja" [color: #1E69FD] {
+  biura_rachunkowe
+  pracownicy
+  gospodarstwa
+  gospodarstwa__lata
+  lata
+  role
+}
+
+Table lata {
+
+  rok integer [pk]
+  status string [not null]
+}
+
+Table biura_rachunkowe {
+
+  idbr string [pk]
+  nazwa string
+  data_wylosowania string [not null]
+  data_nadania string
+
+  indexes {
+    nazwa [unique]
+  }
+}
+
+Table pracownicy {
+
+  idpbr string [pk]
+  login string [not null]
+  password string [not null]
+  salt string [not null]
+  imie string [not null]
+  nazwisko string [not null]
+  email string [not null]
+  rola integer [not null, ref: > role.rola]
+  aktywny integer [not null]
+  zablokowany integer [not null]
+  data_wylosowania string [not null]
+  data_nadania string
+  opis string
+  uwagi string
+  idbr string [not null, ref: > biura_rachunkowe.idbr]
+
+  indexes {
+    login [unique]
+    email [unique]
+  }
+}
+
+Table role {
+  rola string [pk]
+  opis string [not null]
+  uwagi string
+}
+
+
+Table gospodarstwa {
+
+  idgr string [pk, increment]
+  id string [not null] // na zewnatrz
+  idtmpgr string [not null] // auweirt
+  idbr string
+  data_wylosowania string [not null]
+  data_nadania string
+  opis string
+  uwagi string
+  idpbr string [ref: > pracownicy.idpbr]
+}
+
+Table gospodarstwa__lata {
+  rok integer [pk, ref: > lata.rok]
+  idgr string [pk, ref: > gospodarstwa.idgr]
+}
